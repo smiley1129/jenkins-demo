@@ -1,28 +1,28 @@
 pipeline {
     agent any 
     environment {
-    DOCKERHUB_CREDENTIALS = credentials('test1')
+        DOCKERHUB_CREDENTIALS = credentials('test1')
     }
-    stages { 
-
+    stages {
         stage('Build docker image') {
             steps {  
-                sh 'docker build -t jenish007/flaskapp:$BUILD_NUMBER .'
+                sh 'sudo docker build -t jenish007/flaskapp:$BUILD_NUMBER .'
             }
         }
         stage('login to dockerhub') {
-            steps{
+            steps {
                 withCredentials([usernamePassword(credentialsId: 'test1', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                     sh "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD"
                 }
+            }
         }
         stage('push image') {
-            steps{
+            steps {
                 sh 'docker push jenish007/flaskapp:$BUILD_NUMBER'
             }
         }
-}
-post {
+    }
+    post {
         always {
             sh 'docker logout'
         }
