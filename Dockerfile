@@ -1,7 +1,5 @@
 FROM python:3.6
 
-RUN apt-get install -y python3-pip
-
 RUN pip install flask
 
 COPY . /opt/
